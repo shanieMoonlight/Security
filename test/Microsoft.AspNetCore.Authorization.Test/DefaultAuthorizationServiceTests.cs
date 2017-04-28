@@ -53,7 +53,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         public async Task Authorize_ShouldInvokeAllHandlersByDefault()
@@ -125,7 +125,8 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(new ClaimsPrincipal(), "Custom");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
+            Assert.True(allowed.Failure.FailCalled);
             Assert.True(handler1.Invoked);
             Assert.True(handler2.Invoked);
         }
@@ -153,7 +154,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(new ClaimsPrincipal(), "Custom");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
             Assert.True(handler1.Invoked);
             Assert.Equal(invokeAllHandlers, handler2.Invoked);
         }
@@ -169,8 +170,6 @@ namespace Microsoft.AspNetCore.Authorization.Test
                 return Task.FromResult(0);
             }
         }
-
-
 
         [Fact]
         public async Task Authorize_ShouldFailWhenAllRequirementsNotHandled()
@@ -195,7 +194,8 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
+            Assert.IsType<ClaimsAuthorizationRequirement>(allowed.Failure.FailedRequirements.First());
         }
 
         [Fact]
@@ -221,7 +221,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -247,7 +247,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -271,7 +271,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -290,7 +290,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(null, null, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -310,7 +310,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -336,7 +336,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -371,7 +371,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, policy.Build());
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -392,7 +392,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, policy.Build());
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -409,7 +409,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, policy.Build());
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -426,7 +426,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, policy.Build());
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -442,7 +442,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, policy.Build());
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -463,7 +463,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, policy.Build());
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -488,7 +488,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -526,7 +526,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Hao");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -552,7 +552,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Hao");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -574,7 +574,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Hao");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -596,7 +596,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Hao");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -621,7 +621,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Any");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -641,7 +641,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Any");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         public class CustomRequirement : IAuthorizationRequirement { }
@@ -674,7 +674,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Custom");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -695,7 +695,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Custom");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         public class PassThroughRequirement : AuthorizationHandler<PassThroughRequirement>, IAuthorizationRequirement
@@ -735,7 +735,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Passthrough");
 
             // Assert
-            Assert.Equal(shouldSucceed, allowed);
+            Assert.Equal(shouldSucceed, allowed.Succeeded);
         }
 
         [Fact]
@@ -763,7 +763,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Combined");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -790,7 +790,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Combined");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         [Fact]
@@ -817,7 +817,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, null, "Combined");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         public class ExpenseReport { }
@@ -879,9 +879,9 @@ namespace Microsoft.AspNetCore.Authorization.Test
 
             // Act
             // Assert
-            Assert.True(await authorizationService.AuthorizeAsync(user, null, Operations.Edit));
-            Assert.True(await authorizationService.AuthorizeAsync(user, null, Operations.Delete));
-            Assert.True(await authorizationService.AuthorizeAsync(user, null, Operations.Create));
+            Assert.True((await authorizationService.AuthorizeAsync(user, null, Operations.Edit)).Succeeded);
+            Assert.True((await authorizationService.AuthorizeAsync(user, null, Operations.Delete)).Succeeded);
+            Assert.True((await authorizationService.AuthorizeAsync(user, null, Operations.Create)).Succeeded);
         }
 
         public class NotCalledHandler : AuthorizationHandler<OperationAuthorizationRequirement, string>
@@ -921,8 +921,8 @@ namespace Microsoft.AspNetCore.Authorization.Test
 
             // Act
             // Assert
-            Assert.False(await authorizationService.AuthorizeAsync(user, 1, Operations.Edit));
-            Assert.True(await authorizationService.AuthorizeAsync(user, 2, Operations.Edit));
+            Assert.False((await authorizationService.AuthorizeAsync(user, 1, Operations.Edit)).Succeeded);
+            Assert.True((await authorizationService.AuthorizeAsync(user, 2, Operations.Edit)).Succeeded);
         }
 
 
@@ -944,7 +944,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
 
             // Act
             // Assert
-            Assert.False(await authorizationService.AuthorizeAsync(user, 1, Operations.Edit));
+            Assert.False((await authorizationService.AuthorizeAsync(user, 1, Operations.Edit)).Succeeded);
         }
 
         [Fact]
@@ -959,9 +959,9 @@ namespace Microsoft.AspNetCore.Authorization.Test
 
             // Act
             // Assert
-            Assert.True(await authorizationService.AuthorizeAsync(user, new ExpenseReport(), Operations.Edit));
-            Assert.False(await authorizationService.AuthorizeAsync(user, new ExpenseReport(), Operations.Delete));
-            Assert.False(await authorizationService.AuthorizeAsync(user, new ExpenseReport(), Operations.Create));
+            Assert.True((await authorizationService.AuthorizeAsync(user, new ExpenseReport(), Operations.Edit)).Succeeded);
+            Assert.False((await authorizationService.AuthorizeAsync(user, new ExpenseReport(), Operations.Delete)).Succeeded);
+            Assert.False((await authorizationService.AuthorizeAsync(user, new ExpenseReport(), Operations.Create)).Succeeded);
         }
 
         [Fact]
@@ -976,7 +976,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
 
             // Act
             // Assert
-            Assert.False(await authorizationService.AuthorizeAsync(user, null, Operations.Edit));
+            Assert.False((await authorizationService.AuthorizeAsync(user, null, Operations.Edit)).Succeeded);
         }
 
         [Fact]
@@ -995,7 +995,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         [Fact]
@@ -1014,7 +1014,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.True(allowed);
+            Assert.True(allowed.Succeeded);
         }
 
         public class StaticPolicyProvider : IAuthorizationPolicyProvider
@@ -1048,7 +1048,7 @@ namespace Microsoft.AspNetCore.Authorization.Test
             var allowed = await authorizationService.AuthorizeAsync(user, "Basic");
 
             // Assert
-            Assert.False(allowed);
+            Assert.False(allowed.Succeeded);
         }
 
         public class DynamicPolicyProvider : IAuthorizationPolicyProvider
@@ -1080,23 +1080,15 @@ namespace Microsoft.AspNetCore.Authorization.Test
 
             // Act
             // Assert
-            Assert.False(await authorizationService.AuthorizeAsync(user, "0"));
-            Assert.True(await authorizationService.AuthorizeAsync(user, "1"));
-            Assert.True(await authorizationService.AuthorizeAsync(user, "2"));
-            Assert.False(await authorizationService.AuthorizeAsync(user, "3"));
+            Assert.False((await authorizationService.AuthorizeAsync(user, "0")).Succeeded);
+            Assert.True((await authorizationService.AuthorizeAsync(user, "1")).Succeeded);
+            Assert.True((await authorizationService.AuthorizeAsync(user, "2")).Succeeded);
+            Assert.False((await authorizationService.AuthorizeAsync(user, "3")).Succeeded);
         }
 
         public class SuccessEvaluator : IAuthorizationEvaluator
         {
-            public bool HasFailed(AuthorizationHandlerContext context)
-            {
-                return false;
-            }
-
-            public bool HasSucceeded(AuthorizationHandlerContext context)
-            {
-                return true;
-            }
+            public AuthorizeResult Evaluate(AuthorizationHandlerContext context) => AuthorizeResult.Success();
         }
 
         [Fact]
@@ -1107,7 +1099,8 @@ namespace Microsoft.AspNetCore.Authorization.Test
                 services.AddSingleton<IAuthorizationEvaluator, SuccessEvaluator>();
                 services.AddAuthorization(options => options.AddPolicy("Fail", p => p.RequireAssertion(c => false)));
             });
-            Assert.True(await authorizationService.AuthorizeAsync(null, "Fail"));
+            var result = await authorizationService.AuthorizeAsync(null, "Fail");
+            Assert.True(result.Succeeded);
         }
 
 
@@ -1148,7 +1141,26 @@ namespace Microsoft.AspNetCore.Authorization.Test
                 services.AddSingleton<IAuthorizationHandlerContextFactory, BadContextMaker>();
                 services.AddAuthorization(options => options.AddPolicy("Success", p => p.RequireAssertion(c => true)));
             });
-            Assert.False(await authorizationService.AuthorizeAsync(null, "Success"));
+            Assert.False((await authorizationService.AuthorizeAsync(null, "Success")).Succeeded);
+        }
+
+        public class SadHandlerProvider : IAuthorizationHandlerProvider
+        {
+            public Task<IEnumerable<IAuthorizationHandler>> GetHandlersAsync(AuthorizationHandlerContext context)
+            {
+                return Task.FromResult<IEnumerable<IAuthorizationHandler>>(new IAuthorizationHandler[1] { new FailHandler() });
+            }
+        }
+
+        [Fact]
+        public async Task CanUseCustomHandlerProvider()
+        {
+            var authorizationService = BuildAuthorizationService(services =>
+            {
+                services.AddSingleton<IAuthorizationHandlerProvider, SadHandlerProvider>();
+                services.AddAuthorization(options => options.AddPolicy("Success", p => p.RequireAssertion(c => true)));
+            });
+            Assert.False((await authorizationService.AuthorizeAsync(null, "Success")).Succeeded);
         }
 
     }
